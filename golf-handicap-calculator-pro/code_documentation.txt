@@ -1,0 +1,65 @@
+This document will explain as well as possible the way all the files work together and what happens where.
+>>golf-handicap-calculator.php
+	Index file for the plugin will load files, create the datebase table and echo the custom css. 
+<<
+>>licensing.php
+	Activates and deactivates the license for the plugin and checks for any updates.
+<<
+>>GHC_SL_PLUGIN_Updater.php
+	Updates the Plugin.
+<<
+>>form_calc.php
+	Does the final calculations and saves the score to the database from the input form.
+<<
+>>submit.js
+	Holds the js for the main input form.
+<<
+>>style.css
+	Main/only css file for the plugin.
+<<
+>>form_validation.php
+	Server-side form validation.
+<<
+>>ghc_form.php
+	Builds the score card input form.
+<<
+>>uninstall.php
+	Runs when deleting the plugin, will clear all database tables, options and files.
+<<
+>>>>shortcodes
+	>>shortcode.php
+		Includes all the shortcode files.
+	<<
+	>>display_users.php
+		Holds the code for the [ghc_display_users] shortcode.
+	<<
+	>>form.php
+		Holds the code for the [ghc_form] shortcode.
+	<<
+	>>user_details.php
+		Holds the code for the [ghc_user_details] shortcode.
+	<<
+<<
+>>>>admin
+	>>template_page.php
+		Build the template add/edit page in the admin area.
+	<<
+	<<competitions_page.php
+		Build the competitions page in the admin area
+	<<
+	>>template_submit.js
+		The js for submitting the template add/edit page forms.
+	<<
+	>>admin_style.css
+		Holds the css for the admin pages.
+	<<
+	>>admin-page.php
+		Creates the ghc admin settings page.
+	<<
+	>>user_profile_edit.php
+		Allows editing of users handicaps from their profile pages.
+	<<
+	>>template_form_submit.php
+		Does the calculations for the template addition form
+	<<
+<<<<

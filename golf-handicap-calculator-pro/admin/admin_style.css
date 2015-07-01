@@ -1,0 +1,19 @@
+/** Holds the css for the admin pages **/
+.ghc_template_form {
+	border-top:1px solid #777777;
+	border-left:1px solid #777777;
+}
+.ghc_template_form tr:nth-child(even) > td:nth-child(1){
+	background-color:#c9c9c9 !important;
+}
+.ghc_template_form:nth-child(even){
+	border:1px solid #777777 !important;
+}
+
+.ghc_template_form th, .ghc_template_form td{
+	border-bottom:1px solid #777777;
+	border-right:1px solid #777777;
+}
+.ghc_admin_page h2{
+	font-size:23px;
+}
