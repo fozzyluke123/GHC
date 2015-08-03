@@ -1,12 +1,16 @@
 <?php
 //Builds the score card input form.
-$handicap =  $cardcalc[8];
-global $wpdb;
+$current_user = get_current_user_id();
+$handicap =  get_user_meta($current_user, 'handicap', true);
+$user_sex = get_user_meta($current_user, "sex", true);
 $ct_table_name = $wpdb->prefix . "ghc_ct_data";
 $table_name = $wpdb->prefix . "ghc_cards";
 $temp_name_arr = $wpdb->get_col("SELECT course_name FROM $ct_table_name  WHERE comp_par != '' OR male_par != '' OR female_par != '' OR junior_par != ''");
 $temp_name_count = count($temp_name_arr);
-$i = 0;
+?><script>
+    handicap = "<?php echo ($handicap); ?>";
+   	user_sex = "<?php echo ($user_sex); ?>";
+</script><?php
 if (isset($_POST["ghc_fe_template_select"])){ //if loading a template
 	$temp_name = $_POST["ghc_fe_template_select"];
 	$par = strtolower($_POST["ghc_fe_tee_select"] . "_par");
@@ -33,7 +37,7 @@ for($i=0 ;$i < $temp_name_count ;$i++ ){
 			<?php
 			$temp_tee_arr = $wpdb->get_results("SELECT * FROM $ct_table_name" , "ARRAY_A");
 			echo json_encode($temp_tee_arr); //converts from a php assoc_array into a js one
-			?>;
+		?>;
 		jQuery("#ghc_fe_template_select").change(function(){
 			document.getElementById("ghc_fe_tee_select").removeAttribute("hidden"); // when a course has been selected then show the tee select box
 			document.getElementById("ghc_fe_tee_select").innerHTML = ("");
@@ -68,7 +72,6 @@ Will automatically fill in form with the courses details.
 <form method="post" name="ghc_form"> <!-- Main input form -->
 <?php if (isset($_POST["ghc_fe_template_select"])){ ?> <h3>Template for <?php echo($temp_name . " - " . ucwords($_POST["ghc_fe_tee_select"])) ?> loaded <?php }?> <!-- Displays the loaded template -->
 <br /><br />
-
     <table class = "ghcform">
         <tr>
             <th>Hole No.</th>
@@ -85,17 +88,14 @@ Will automatically fill in form with the courses details.
         <?php for ($i=1;$i<=18;$i++){?> <!-- Build the par, score and si parts of the form-->
             <tr>
                 <td><?php echo $i ?></td>
-                <td><input type = "number" name = "par-<?php echo $i ?>" <?php if(isset($_POST['ghc_fe_temp_hidden'])){?> value = "<?php echo $temp_par_arr[$i - 1] ?>" <?php } ?> /></td> <!--populate with the tamplate data-->
-                <td><input type = "number" name = "score-<?php echo $i ?>" /></td>
-                <?php if($handicap == "" || $handicap == "-1" ||$handicap == "-2" ){//check for whether the user already has handicap
-                }
-                else{
-                ?>
-                <td><input type = "number" name = "si-<?php echo $i ?>" <?php if(isset($_POST['ghc_fe_temp_hidden'])){?> value = "<?php echo $temp_si_arr[$i - 1] ?>" <?php } ?>/></td>
+                <td><input type = "number" name = "par-<?php echo $i ?>" id = "par-<?php echo $i ?>" <?php if(isset($_POST['ghc_fe_temp_hidden'])){?> value = "<?php echo $temp_par_arr[$i - 1] ?>" tabindex = "3"<?php } ?> /></td> <!--populate with the tamplate data-->
+                <td><input type = "number" name = "score-<?php echo $i ?>" id = "score-<?php echo $i ?>" <?php if(isset($_POST['ghc_fe_temp_hidden'])){?>tabindex = "2" <?php } ?>></td>
+                <?php if($handicap != ""){//check for whether the user already has handicap
+                	?><td><input type = "number" name = "si-<?php echo $i ?>"  id = "si-<?php echo $i ?>" <?php if(isset($_POST['ghc_fe_temp_hidden'])){?> value = "<?php echo $temp_si_arr[$i - 1] ?>" tabindex = "4"<?php } ?>/></td>
                 <?php } ?>
             </tr>
         <?php }
-		if($cardcalc[1] == "" && isset($_POST["ghc_submit"]) == false){ ?>                
+		if($user_sex == ""){ ?>                
             <tr>
                 <td>Sex:</td>
                 <td><input type = radio name = "user_sex" value = "Male"/>Male</td>
@@ -109,22 +109,15 @@ Will automatically fill in form with the courses details.
             </tr>
         <?php } ?>
         <tr>    
-            <td><input class = "ghc_button" name = "ghc_submit" type = "button" value="Submit" onClick="submitForm()"/></td>
+            <td><input class = "ghc_button" name = "ghc_submit" type = "submit" value="Submit" onClick="return submitForm()"/></td>
             <td><input class = "ghc_button" name = "ghc_reset" type = "reset" /></td>
             <td></td>
-            <?php if($handicap == "" || $handicap == "-1" ||$handicap == "-2" ){//check for whether the user already has handicap
-			}
-			else{
+            <?php if("1==1"){//check for whether the user already has handicap
+				?>
+	            <td></td>
+	            <?php 
+        	}
 			?>
-            <td></td>
-            <?php }
-			$user_sex = $cardcalc[1]; ?>
-
         </tr>
     </table>
-    <input type="hidden" name="valid_succeed" /> <!-- these hidden fields hold values from/for the submit.js -->
-    <input type="hidden" name="par_total"/>    
-    <input type="hidden" name="score_total"/>
-    <input type="hidden" name="handicap" value ="<?php echo $handicap ?>"/>
-    <input type="hidden" name="db_user_sex" value ="<?php echo $user_sex ?>"/>
 </form>

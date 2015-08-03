@@ -38,8 +38,14 @@ if (isset($_POST['ghc_delete_submit'])){//extracts name of course, then deletes 
 }
 
 if (isset($_POST['ghc_save_submit'])){//if submitting a template
-	$course_name = $_POST["ghc_name_hidden"];
-	$course_tee = $_POST["ghc_tee_hidden"];
+	if (isset($_POST["ghc_name_hidden"])){//if editing a template
+		$course_name = $_POST["ghc_name_hidden"];
+		$course_tee = $_POST["ghc_tee_hidden"];
+	}
+	else{//if creating a new template
+		$course_name = $_POST["ghc_template_name"];
+		$course_tee = $_POST["ghc_template_tee"];
+	}
 	$temp_arr = $wpdb -> get_row("select * from $table_name WHERE course_name = '$course_name'", ARRAY_A);
 	$course_id = $temp_arr["course_id"];
 	$int_par = "";
@@ -48,8 +54,8 @@ if (isset($_POST['ghc_save_submit'])){//if submitting a template
 		$int_par .= $_POST["ghc_par_input_" . $i] . ",";
 		$int_si .= $_POST["ghc_si_input_" .$i]. ",";
 	}
-	$par = strtolower($_POST["ghc_tee_hidden"]) . "_par";//converts par and si from select box value to the db column name
-	$si= strtolower($_POST["ghc_tee_hidden"]) . "_si";
+	$par = strtolower($course_tee) . "_par";//converts par and si from select box value to the db column name
+	$si= strtolower($course_tee) . "_si";
 	$add_template_edit_inputs = array(
 		$par => $int_par,
 		$si => $int_si

@@ -13,7 +13,7 @@ function ghc_template_page(){// The page to enter templates for courses
 		<h1>Course templates</h1>
 		<p>To enter a new template fill out the form and save, to edit a form, select the form from the drop down list and then change the values in the form and save.</p>
 		<br />
-		<form method="post" name="ghc_add_form">
+		<form method="post" name="ghc_add_course_form">
 			<h2>Add a new course</h2>
 			<br />
 			<input type="text" name="ghc_name_add" maxlength="50"/>
@@ -91,8 +91,8 @@ function ghc_template_page(){// The page to enter templates for courses
 			?>
 				<h2>Add a new tee template</h2>
 				<br />
-				<label for="ghc_name_hidden">Course Name -</label>
-				<select name="ghc_name_hidden" id="ghc_name_hidden">
+				<label for="f_name">Course Name -</label>
+				<select name="ghc_template_name" id="ghc_template_name">
 					<option disabled selected>--Select a Course--</option>
 					<?php
 					$course_name_arr = $wpdb->get_col("SELECT DISTINCT course_name FROM $table_name");//loads all courses into arrays for tee and name from the db
@@ -102,12 +102,12 @@ function ghc_template_page(){// The page to enter templates for courses
 					}
 					?>
 				</select>
-				<select name="ghc_tee_hidden" id ="ghc_tee_hidden" hidden>
+				<select name="ghc_template_tee" id ="ghc_template_tee" hidden>
 					<option selected>--Choose One--</option> <!-- Tee Selection-->
-					<option id="ghc_tee_hidden_comp">Competition</option>
-					<option id="ghc_tee_hidden_male">Male</option>
-					<option id="ghc_tee_hidden_female">Female</option>
-					<option id="ghc_tee_hidden_junior">Junior</option>
+					<option id="ghc_template_tee_comp" value = "comp">Competition</option>
+					<option id="ghc_template_tee_male">Male</option>
+					<option id="ghc_template_tee_female">Female</option>
+					<option id="ghc_template_tee_junior">Junior</option>
 				</select>
 				<script >// this will dynamically populate the tee select box depending on what tee's are completed for that course
 					var course_array_add =
@@ -115,15 +115,15 @@ function ghc_template_page(){// The page to enter templates for courses
 						$temp_tee_arr = $wpdb->get_results("SELECT * FROM $table_name", "ARRAY_A");
 						echo json_encode($temp_tee_arr); //converts from a php assoc_array into a js one
 						?>;
-					jQuery("#ghc_name_hidden").change(function(){
-						document.getElementById("ghc_tee_hidden").removeAttribute("hidden"); // when a course has been selected then show the tee select box
-						var index = document.getElementById("ghc_name_hidden").selectedIndex - 1;
+					jQuery("#ghc_template_name").change(function(){
+						document.getElementById("ghc_template_tee").removeAttribute("hidden"); // when a course has been selected then show the tee select box
+						var index = document.getElementById("ghc_template_name").selectedIndex - 1;
 						function dynamic_tee(tee){
 							if(course_array_add[index][tee + "_par"] !== null && course_array_add[index][tee + "_par"] !== "") {//if that tee has a template added then add it to the select box
-								document.getElementById("ghc_tee_hidden_" + tee).setAttribute('disabled', 'true');
+								document.getElementById("ghc_template_tee_" + tee).setAttribute('disabled', 'true');
 							}
 							else{
-								document.getElementById("ghc_tee_hidden_" + tee).removeAttribute('disabled');
+								document.getElementById("ghc_template_tee_" + tee).removeAttribute('disabled');
 							}
 						}
 						dynamic_tee("comp");
@@ -149,8 +149,8 @@ function ghc_template_page(){// The page to enter templates for courses
 					?>
 					<tr>
 						<td><?php echo $int ?></td>
-						<td><input type="number" name="ghc_par_input_<?php echo $int ?>" value="<?php echo $temp_par[$int - 1] ?>" /></td>
-						<td><input type="number" name="ghc_si_input_<?php echo $int ?>" value="<?php echo $temp_si[$int - 1] ?>"/></td>
+						<td><input type="number" name="ghc_par_input_<?php echo $int ?>" id = "ghc_par_input_<?php echo $int ?>" value="<?php echo $temp_par[$int - 1] ?>" /></td>
+						<td><input type="number" name="ghc_si_input_<?php echo $int ?>" id = "ghc_si_input_<?php echo $int ?>" value="<?php echo $temp_si[$int - 1] ?>"/></td>
 					</tr>
 				<?php } ?>
 			</table>

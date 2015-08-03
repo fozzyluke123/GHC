@@ -16,7 +16,7 @@ if (get_option( 'ghc_license_status' ) == "valid"){ //if the plugin is licensed 
 	include "shortcodes/shortcode.php";
 	add_action( 'wp_enqueue_scripts', 'add_submit_script' );
 	include "form_calc.php";
-};
+}
 add_action( 'wp_enqueue_scripts', 'add_stylesheet' );
 add_action( 'admin_init', 'add_admin_stylesheet' );
 
@@ -62,7 +62,6 @@ function ghc_table_install() {
 			si TEXT DEFAULT NULL,
 			score TEXT DEFAULT NULL,
 			date_time DATETIME DEFAULT NULL,
-			note TEXT DEFAULT NULL,
 			PRIMARY KEY (card_id)
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
